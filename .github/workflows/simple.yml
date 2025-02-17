@@ -1,4 +1,4 @@
-name: Simple Workflow with Rocket Output 🚀
+name: Simple Workflow with Rocket Summary 🚀
 
 on:
   push:
@@ -23,8 +23,10 @@ jobs:
         run: |
           echo "🚀 Running Python script"
           python -c "print('Hello from GitHub Actions! 🚀')"
+          echo "## 🚀 Python script executed successfully!" >> $GITHUB_STEP_SUMMARY
 
       - name: Display output 🚀
         run: |
           echo "🚀 Workflow execution complete!"
           echo "🚀 Everything is working smoothly!"
+          echo "## 🚀 Workflow execution complete!" >> $GITHUB_STEP_SUMMARY
