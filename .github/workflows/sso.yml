@@ -7,7 +7,7 @@ on:
         description: >
           📘 Enter a full paragraph here.
 
-          Paste a multiline paragraph, and we'll display it cleanly in logs and the summary.
+          Paste a multiline paragraph and we'll display it cleanly in logs and the summary.
         required: true
 
 jobs:
@@ -16,21 +16,25 @@ jobs:
 
     steps:
       - name: Set input as environment variable
-        run: echo "MESSAGE=${{ github.event.inputs.message }}" >> $GITHUB_ENV
+        run: |
+          echo "MESSAGE<<EOF" >> $GITHUB_ENV
+          echo "${{ github.event.inputs.message }}" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Display paragraph using Python
         run: |
-          python3 -c "
+          python3 <<EOF
 import os
 
 paragraph = f'''📘 Paragraph Input Received:
 
 -------------------------------------
-{os.environ.get('MESSAGE', '').strip()}
+{os.getenv("MESSAGE", "").strip()}
 -------------------------------------
 '''
+
 print(paragraph)
-          "
+EOF
 
       - name: Add paragraph to GitHub Step Summary
         run: |
