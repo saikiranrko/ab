@@ -5,9 +5,7 @@ on:
     inputs:
       message:
         description: >
-          📘 Enter a multiline paragraph here.
-
-          Although the input description won't render multiline, we will process it and display it as a real paragraph in logs and the summary.
+          📘 Enter a paragraph. Use `\n` for new lines (e.g., Line 1\nLine 2\nLine 3)
         required: true
 
 jobs:
@@ -15,19 +13,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Save message to environment
+      - name: Set env var
         run: echo "MESSAGE=${{ github.event.inputs.message }}" >> $GITHUB_ENV
 
-      - name: Print paragraph with Python
+      - name: Log output
         run: |
           echo "📘 Paragraph Input Received:"
           echo "-------------------------------------"
-          echo "$MESSAGE"
+          echo -e "$MESSAGE"
           echo "-------------------------------------"
 
-      - name: Add paragraph to GitHub Step Summary
+      - name: Add to GitHub Step Summary
         run: |
           echo "### 📘 Paragraph Input Summary" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "$MESSAGE" >> $GITHUB_STEP_SUMMARY
+          echo -e "$MESSAGE" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
