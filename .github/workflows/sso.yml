@@ -17,4 +17,4 @@ jobs:
 
     steps:
       - name: Print the input message
-        run: echo "🚀 Message: ${{ github.event.inputs.message }}"
+        run: echo '🚀 Message: ${{ github.event.inputs.message }}'
