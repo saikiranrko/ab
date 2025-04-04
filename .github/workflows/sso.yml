@@ -17,17 +17,15 @@ jobs:
     steps:
       - name: Display paragraph using Python
         run: |
-          python3 -c "
-paragraph = '''📘 Paragraph Input Received:
+          python3 -c 'paragraph = """📘 Paragraph Input Received:
 
 -------------------------------------
 ${{ github.event.inputs.message }}
 -------------------------------------
-'''
-print(paragraph)
-          "
+"""
+print(paragraph)'
 
-      - name: Add paragraph to step summary
+      - name: Add paragraph to GitHub Step Summary
         run: |
           echo "### 📘 Paragraph Input Summary" >> $GITHUB_STEP_SUMMARY
           echo '```\n${{ github.event.inputs.message }}\n```' >> $GITHUB_STEP_SUMMARY
