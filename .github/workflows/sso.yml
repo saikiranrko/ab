@@ -1,21 +1,33 @@
-name: Test Input Description
+name: Multiline Paragraph Display
 
 on:
   workflow_dispatch:
     inputs:
       message:
         description: >
-          📝 This is a test description.
+          📘 Enter a full paragraph here.
 
-          Enter any message here to test how input descriptions show up in the GitHub UI.
+          Paste a multiline paragraph (yes, it works!) and we'll show it nicely in logs and summary.
         required: true
-        default: "Hello from the input!"
 
 jobs:
-  echo-input:
+  display-paragraph:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Print the input message
+      - name: Display paragraph using Python
         run: |
-          echo "🚀 Message: ${{ github.event.inputs.message }}"
+          python3 -c "
+paragraph = '''📘 Paragraph Input Received:
+
+-------------------------------------
+${{ github.event.inputs.message }}
+-------------------------------------
+'''
+print(paragraph)
+          "
+
+      - name: Add paragraph to step summary
+        run: |
+          echo "### 📘 Paragraph Input Summary" >> $GITHUB_STEP_SUMMARY
+          echo '```\n${{ github.event.inputs.message }}\n```' >> $GITHUB_STEP_SUMMARY
