@@ -1,25 +1,25 @@
-name: Echo Input Example
-description: |
-  A simple composite GitHub Action that prints a user-defined message.
+name: Test Input Description Feature
 
-  This action is designed to demonstrate how multi-line descriptions work for inputs.
-  It can be reused in various workflows where basic message logging is required.
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: |
+          📝 Enter a message to test input descriptions.
 
-inputs:
-  message:
-    description: |
-      📌 **Message to print**
+          This message will be passed into a reusable composite action. Try something fun!
+        required: true
+        default: "Hello from workflow input!"
 
-      This is a required input. You should provide a string message that you want
-      to display in the workflow logs.
+jobs:
+  test-description:
+    runs-on: ubuntu-latest
 
-      Multi-line descriptions like this help make inputs more readable in documentation or in GitHub Marketplace.
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    required: true
-    default: "Default message from action"
-
-runs:
-  using: "composite"
-  steps:
-    - name: Echo the input message
-      run: echo "🚀 Message from input: ${{ inputs.message }}"
+      - name: Use local composite action with input description
+        uses: ./.github/actions/echo-input
+        with:
+          message: ${{ github.event.inputs.message }}
