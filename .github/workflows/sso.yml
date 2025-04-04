@@ -1,25 +1,20 @@
-name: Test Input Description Feature
+name: Test Input Description
 
 on:
   workflow_dispatch:
     inputs:
       message:
         description: |
-          📝 Enter a message to test input descriptions.
+          📝 This is a test description.
 
-          This message will be passed into a reusable composite action. Try something fun!
+          Enter any message here to test how input descriptions show up in the GitHub UI.
         required: true
-        default: "Hello from workflow input!"
+        default: "Hello from the input!"
 
 jobs:
-  test-description:
+  echo-input:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Use local composite action with input description
-        uses: ./.github/actions/echo-input
-        with:
-          message: ${{ github.event.inputs.message }}
+      - name: Print the input message
+        run: echo "🚀 Message: ${{ github.event.inputs.message }}"
