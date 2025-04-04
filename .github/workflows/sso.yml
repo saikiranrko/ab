@@ -1,0 +1,17 @@
+name: Test Input Description Feature
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-description:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use local composite action with descriptions
+        uses: ./.github/actions/echo-input
+        with:
+          message: "Hello from the workflow input!"
