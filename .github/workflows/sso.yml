@@ -18,20 +18,38 @@ jobs:
         run: |
           cat > process.py << 'EOF'
           import os
+          import re
           
           # Read the input file
           with open("input.txt", "r") as f:
               message = f.read()
           
-          # Process the multiline input
-          formatted_message = message.splitlines()
-          formatted_output = "\n".join(formatted_message)
+          # Look for patterns that indicate line breaks should be present
+          # 1. Double spaces often indicate line breaks
+          # 2. Section headers followed by content
+          # 3. Lists with dashes
+          
+          # Replace multiple spaces between sections with newlines
+          formatted_output = re.sub(r'  +', '\n', message)
+          
+          # Add newlines after section headers
+          formatted_output = re.sub(r'(Section \d+:.+?)(\w)', r'\1\n\2', formatted_output)
+          
+          # Add newlines after list item markers
+          formatted_output = re.sub(r'(- .+?)(\w)', r'\1\n\2', formatted_output)
+          
+          # Add extra newline after author line
+          formatted_output = re.sub(r'(Author:.+?)\n', r'\1\n\n', formatted_output)
           
           # Print the formatted output
           print("📘 Paragraph from input:")
           print("-----------------------------")
           print(formatted_output)
           print("-----------------------------")
+          
+          # Save the formatted output for the step summary
+          with open("formatted_output.txt", "w") as f:
+              f.write(formatted_output)
           EOF
       
       - name: Run Python script
@@ -39,7 +57,7 @@ jobs:
       
       - name: Add to GitHub Step Summary
         run: |
-          echo "### 📘 Paragraph from input" >> $GITHUB_STEP_SUMMARY
+          echo "### 📘 Formatted Paragraph" >> $GITHUB_STEP_SUMMARY
           echo "<pre>" >> $GITHUB_STEP_SUMMARY
-          cat input.txt >> $GITHUB_STEP_SUMMARY
+          cat formatted_output.txt >> $GITHUB_STEP_SUMMARY
           echo "</pre>" >> $GITHUB_STEP_SUMMARY
