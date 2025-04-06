@@ -21,6 +21,9 @@ jobs:
           
           # Convert the input into a multiline format (split by actual newlines in the string)
           python3 -c "
+import os
+
+# Read the message input
 input_message = '''$message'''
 
 # Split the input by lines (assuming user entered multiple lines)
