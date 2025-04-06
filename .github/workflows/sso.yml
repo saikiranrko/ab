@@ -12,34 +12,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Save input to file
-        run: |
-          echo '${{ github.event.inputs.message }}' > input.txt
+        run: echo '${{ github.event.inputs.message }}' > input.txt
       
-      - name: Process with Python
+      - name: Create Python script
         run: |
-          python3 -c '
-import os
-
-# Read the input file
-with open("input.txt", "r") as f:
-    message = f.read()
-
-# Process the multiline input
-formatted_message = message.splitlines()
-formatted_output = "\n".join(formatted_message)
-
-# Print the formatted output
-print("📘 Paragraph from input:")
-print("-----------------------------")
-print(formatted_output)
-print("-----------------------------")
-          '
+          cat > process.py << 'EOF'
+          import os
+          
+          # Read the input file
+          with open("input.txt", "r") as f:
+              message = f.read()
+          
+          # Process the multiline input
+          formatted_message = message.splitlines()
+          formatted_output = "\n".join(formatted_message)
+          
+          # Print the formatted output
+          print("📘 Paragraph from input:")
+          print("-----------------------------")
+          print(formatted_output)
+          print("-----------------------------")
+          EOF
+      
+      - name: Run Python script
+        run: python3 process.py
       
       - name: Add to GitHub Step Summary
         run: |
-          {
-            echo "### 📘 Paragraph from input"
-            echo "<pre>"
-            cat input.txt
-            echo "</pre>"
-          } >> $GITHUB_STEP_SUMMARY
+          echo "### 📘 Paragraph from input" >> $GITHUB_STEP_SUMMARY
+          echo "<pre>" >> $GITHUB_STEP_SUMMARY
+          cat input.txt >> $GITHUB_STEP_SUMMARY
+          echo "</pre>" >> $GITHUB_STEP_SUMMARY
