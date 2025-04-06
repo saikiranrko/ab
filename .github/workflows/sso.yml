@@ -1,31 +1,29 @@
-name: Multiline Paragraph Display
+name: Display Multiline Input Using <pre>
 
 on:
   workflow_dispatch:
     inputs:
       message:
         description: >
-          📘 Enter a paragraph. Use `\n` for new lines (e.g., Line 1\nLine 2\nLine 3)
+          📘 Enter your multiline paragraph here.
+          It will be displayed using <pre> for preserving formatting.
         required: true
 
 jobs:
-  display-paragraph:
+  display-multiline:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set env var
-        run: echo "MESSAGE=${{ github.event.inputs.message }}" >> $GITHUB_ENV
-
-      - name: Log output
+      - name: Display input in logs
         run: |
-          echo "📘 Paragraph Input Received:"
-          echo "-------------------------------------"
-          echo -e "$MESSAGE"
-          echo "-------------------------------------"
+          echo "📘 Paragraph from input:"
+          echo "-----------------------------"
+          echo "${{ github.event.inputs.message }}"
+          echo "-----------------------------"
 
-      - name: Add to GitHub Step Summary
+      - name: Add to GitHub Step Summary using <pre>
         run: |
-          echo "### 📘 Paragraph Input Summary" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo -e "$MESSAGE" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "### 📘 Paragraph from input" >> $GITHUB_STEP_SUMMARY
+          echo "<pre>" >> $GITHUB_STEP_SUMMARY
+          echo "${{ github.event.inputs.message }}" >> $GITHUB_STEP_SUMMARY
+          echo "</pre>" >> $GITHUB_STEP_SUMMARY
