@@ -11,31 +11,35 @@ jobs:
   process-multiline:
     runs-on: ubuntu-latest
     steps:
-      - name: Set message as environment variable
+      - name: Save input to file
         run: |
-          echo 'MESSAGE<<EOF' >> $GITHUB_ENV
-          echo "${{ github.event.inputs.message }}" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-      - name: Convert input into multiline format with Python
+          echo '${{ github.event.inputs.message }}' > input.txt
+      
+      - name: Process with Python
         run: |
-          python3 - <<'EOL'
+          python3 -c '
 import os
-# Get the message from the environment variable
-message = os.getenv('MESSAGE')
-# Split the input by lines (assuming user entered multiple lines)
+
+# Read the input file
+with open("input.txt", "r") as f:
+    message = f.read()
+
+# Process the multiline input
 formatted_message = message.splitlines()
-# Join them with actual line breaks
-formatted_output = '\n'.join(formatted_message)
-# Print the formatted multiline message
-print('📘 Paragraph from input:')
-print('-----------------------------')
+formatted_output = "\n".join(formatted_message)
+
+# Print the formatted output
+print("📘 Paragraph from input:")
+print("-----------------------------")
 print(formatted_output)
-print('-----------------------------')
-EOL
+print("-----------------------------")
+          '
+      
       - name: Add to GitHub Step Summary
         run: |
-          # Add the formatted multiline message to the step summary using <pre> for formatting
-          echo "### 📘 Paragraph from input" >> $GITHUB_STEP_SUMMARY
-          echo "<pre>" >> $GITHUB_STEP_SUMMARY
-          echo "${{ github.event.inputs.message }}" >> $GITHUB_STEP_SUMMARY
-          echo "</pre>" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "### 📘 Paragraph from input"
+            echo "<pre>"
+            cat input.txt
+            echo "</pre>"
+          } >> $GITHUB_STEP_SUMMARY
