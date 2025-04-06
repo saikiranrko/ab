@@ -1,33 +1,44 @@
-name: Display Multiline Input Using <pre>
+name: Process Multiline Input with Python
 
 on:
   workflow_dispatch:
     inputs:
       message:
         description: >
-          📘 Enter your multiline paragraph here.
-          It will be displayed using <pre> to preserve formatting.
+          📘 Paste your multiline text here.
+          When you paste text, it will be converted into the correct multiline format.
         required: true
 
 jobs:
-  display-multiline:
+  process-multiline:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Prepare multiline message with newlines
+      - name: Convert input into multiline format
         run: |
-          # Replace newline characters with actual line breaks
+          # Using Python to split the input into lines based on actual line breaks
           message="${{ github.event.inputs.message }}"
-          message_with_breaks="${message//$'\n'/\\n}"
+          
+          # Convert the input into a multiline format (split by actual newlines in the string)
+          python3 -c "
+input_message = '''$message'''
 
-          echo "📘 Paragraph from input:"
-          echo "-----------------------------"
-          echo "$message_with_breaks"
-          echo "-----------------------------"
+# Split the input by lines (assuming user entered multiple lines)
+formatted_message = input_message.splitlines()
 
-      - name: Add to GitHub Step Summary using <pre>
+# Join them with actual line breaks
+formatted_output = '\n'.join(formatted_message)
+
+# Print the formatted multiline message
+print('📘 Paragraph from input:')
+print('-----------------------------')
+print(formatted_output)
+print('-----------------------------')
+"
+
+      - name: Add to GitHub Step Summary
         run: |
-          # Use <pre> to preserve formatting in summary
+          # Add the formatted multiline message to the step summary using <pre> for formatting
           echo "### 📘 Paragraph from input" >> $GITHUB_STEP_SUMMARY
           echo "<pre>" >> $GITHUB_STEP_SUMMARY
           message="${{ github.event.inputs.message }}"
