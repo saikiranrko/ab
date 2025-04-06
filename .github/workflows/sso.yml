@@ -1,5 +1,4 @@
 name: Process Multiline Input with Python
-
 on:
   workflow_dispatch:
     inputs:
@@ -8,37 +7,29 @@ on:
           📘 Paste your multiline text here.
           When you paste text, it will be converted into the correct multiline format.
         required: true
-
 jobs:
   process-multiline:
     runs-on: ubuntu-latest
-
     steps:
       - name: Set message as environment variable
         run: |
           echo "MESSAGE=${{ github.event.inputs.message }}" >> $GITHUB_ENV
-
       - name: Convert input into multiline format with Python
         run: |
-          python3 -c "
+          python3 <<EOF
 import os
-
 # Get the message from the environment variable
 message = os.getenv('MESSAGE')
-
 # Split the input by lines (assuming user entered multiple lines)
 formatted_message = message.splitlines()
-
 # Join them with actual line breaks
 formatted_output = '\n'.join(formatted_message)
-
 # Print the formatted multiline message
 print('📘 Paragraph from input:')
 print('-----------------------------')
 print(formatted_output)
 print('-----------------------------')
-"
-
+EOF
       - name: Add to GitHub Step Summary
         run: |
           # Add the formatted multiline message to the step summary using <pre> for formatting
