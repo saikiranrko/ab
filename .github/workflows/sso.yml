@@ -6,7 +6,7 @@ on:
       message:
         description: >
           📘 Enter your multiline paragraph here.
-          It will be displayed using <pre> for preserving formatting.
+          It will be displayed using <pre> to preserve formatting.
         required: true
 
 jobs:
@@ -14,16 +14,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Display input in logs
+      - name: Prepare multiline message with newlines
         run: |
+          # Replace newline characters with actual line breaks
+          message="${{ github.event.inputs.message }}"
+          message_with_breaks="${message//$'\n'/\\n}"
+
           echo "📘 Paragraph from input:"
           echo "-----------------------------"
-          echo "${{ github.event.inputs.message }}"
+          echo "$message_with_breaks"
           echo "-----------------------------"
 
       - name: Add to GitHub Step Summary using <pre>
         run: |
+          # Use <pre> to preserve formatting in summary
           echo "### 📘 Paragraph from input" >> $GITHUB_STEP_SUMMARY
           echo "<pre>" >> $GITHUB_STEP_SUMMARY
-          echo "${{ github.event.inputs.message }}" >> $GITHUB_STEP_SUMMARY
+          message="${{ github.event.inputs.message }}"
+          echo "$message" >> $GITHUB_STEP_SUMMARY
           echo "</pre>" >> $GITHUB_STEP_SUMMARY
