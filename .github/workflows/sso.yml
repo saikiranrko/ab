@@ -14,20 +14,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Convert input into multiline format
+      - name: Set message as environment variable
         run: |
-          # Using Python to split the input into lines based on actual line breaks
-          message="${{ github.event.inputs.message }}"
-          
-          # Convert the input into a multiline format (split by actual newlines in the string)
+          echo "MESSAGE=${{ github.event.inputs.message }}" >> $GITHUB_ENV
+
+      - name: Convert input into multiline format with Python
+        run: |
           python3 -c "
 import os
 
-# Read the message input
-input_message = '''$message'''
+# Get the message from the environment variable
+message = os.getenv('MESSAGE')
 
 # Split the input by lines (assuming user entered multiple lines)
-formatted_message = input_message.splitlines()
+formatted_message = message.splitlines()
 
 # Join them with actual line breaks
 formatted_output = '\n'.join(formatted_message)
