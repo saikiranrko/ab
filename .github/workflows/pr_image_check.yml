@@ -11,3 +11,4 @@ jobs:
       MAX_IMAGE_SIZE_KB: 80
     secrets:
       GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN}}
+
