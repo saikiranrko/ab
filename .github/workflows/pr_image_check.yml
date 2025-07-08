@@ -3,11 +3,10 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     branches: [main]
-
 jobs:
   check-large-images:
     uses: saikiranrko/Central-WF/.github/workflows/large_image_detection.yml@main
     with:
       MAX_IMAGE_SIZE_KB: 80
     secrets:
-      GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN}}
+      PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN}}
