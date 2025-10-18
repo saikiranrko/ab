@@ -1,0 +1,38 @@
+name: Upload Artifact to Azure
+
+on:
+  workflow_dispatch:
+    inputs:
+      artifact_path:
+        description: 'Path to the artifact in JFrog Artifactory'
+        required: true
+        type: string
+        default: 'libs-release-local/com/example/app/1.0.0/test-app-1.0.0.zip'
+      azure_fileshare_path:
+        description: 'Azure file share directory path (e.g., production/plugins)'
+        required: false
+        type: string
+        default: 'production/plugins'
+      overwrite:
+        description: 'Whether to overwrite existing files in file share'
+        required: false
+        type: string
+        default: 'true'
+      artifactory_url:
+        description: 'JFrog Artifactory URL'
+        required: true
+        type: string
+        default: 'https://yourname.jfrog.io/artifactory'
+
+jobs:
+  call-fileshare-workflow:
+    uses: saikiranrko/Central-WF/.github/workflows/upload-artifact-to-fileshare.yml@main
+    with:
+      artifact_path: ${{ github.event.inputs.artifact_path }}
+      azure_fileshare_path: ${{ github.event.inputs.azure_fileshare_path }}
+      overwrite: ${{ github.event.inputs.overwrite }}
+      artifactory_url: ${{ github.event.inputs.artifactory_url }}
+    secrets:
+      ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
+      ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+      AZURE_FILESHARE_SAS_TOKEN_URL: ${{ secrets.AZURE_FILESHARE_SAS_TOKEN_URL }}
