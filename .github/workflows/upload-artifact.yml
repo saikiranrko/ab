@@ -12,7 +12,7 @@ on:
         description: 'Azure file share directory path (e.g., production/plugins)'
         required: false
         type: string
-        default: 'production/plugins'
+        default: ''
       overwrite:
         description: 'Whether to overwrite existing files in file share'
         required: false
