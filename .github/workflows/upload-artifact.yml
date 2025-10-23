@@ -4,23 +4,20 @@ on:
   workflow_dispatch:
     inputs:
       artifact_path:
-        description: 'Path to the artifact in JFrog Artifactory'
-        required: true
         type: string
+        required: true
         default: 'libs-release-local/com/example/app/1.0.0/test-app-1.0.0.zip'
       azure_fileshare_path:
-        description: 'Azure file share directory path (e.g., production/plugins)'
-        required: false
         type: string
+        required: false
         default: ''
       overwrite:
-        description: 'Whether to overwrite existing files in file share'
-        required: false
         type: string
+        required: false
         default: 'true'
 
 jobs:
-  call-fileshare-workflow:
+  call:
     uses: saikiranrko/Central-WF/.github/workflows/upload-artifact-to-fileshare.yml@main
     with:
       artifact_path: ${{ github.event.inputs.artifact_path }}
