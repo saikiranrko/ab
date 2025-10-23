@@ -21,7 +21,7 @@ on:
 
 jobs:
   call-fileshare-workflow:
-    uses: saikiranrko/Central-WF/.github/workflows/upload-artifact-to-fileshare.yml@main
+  uses: saikiranrko/Central-WF/.github/workflows/upload-artifact-to-fileshare.yml@376bb72f6201bf15293887826a626f236b7310c6
     with:
       artifact_path: ${{ github.event.inputs.artifact_path }}
       azure_fileshare_path: ${{ github.event.inputs.azure_fileshare_path }}
