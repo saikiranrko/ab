@@ -21,13 +21,12 @@ on:
 
 jobs:
   call-fileshare-workflow:
-  uses: saikiranrko/Central-WF/.github/workflows/upload-artifact-to-fileshare.yml@main
+    uses: saikiranrko/Central-WF/.github/workflows/upload-artifact-to-fileshare.yml@main
     with:
       artifact_path: ${{ github.event.inputs.artifact_path }}
       azure_fileshare_path: ${{ github.event.inputs.azure_fileshare_path }}
       overwrite: ${{ github.event.inputs.overwrite }}
     secrets:
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
       ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
       ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
       AZURE_FILESHARE_SAS_TOKEN_URL: ${{ secrets.AZURE_FILESHARE_SAS_TOKEN_URL }}
