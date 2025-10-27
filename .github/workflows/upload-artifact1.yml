@@ -1,0 +1,44 @@
+name: Upload Artifact to Azure
+
+on:
+  workflow_dispatch:
+    inputs:
+      artifact_path:
+        description: 'Path to the artifact in JFrog Artifactory'
+        required: true
+        type: string
+        default: 'libs-release-local/com/example/app/1.0.0/test-app-1.0.0.zip'
+      azure_fileshare_name:
+        description: 'Azure file share name (e.g., myshare, production)'
+        required: true
+        type: string
+        default: 'myshare'
+      azure_fileshare_path:
+        description: 'Directory inside file share (e.g., production/plugins). Leave empty for root.'
+        required: false
+        type: string
+        default: ''
+      overwrite:
+        description: 'Whether to overwrite existing files in file share'
+        required: false
+        type: string
+        default: 'true'
+
+jobs:
+  call-fileshare-workflow:
+    uses: saikiranrko/Central-WF/.github/workflows/upload-artifact-to-fileshare.yml@main
+    with:
+      artifact_path: ${{ github.event.inputs.artifact_path }}
+      azure_fileshare_name: ${{ github.event.inputs.azure_fileshare_name }}
+      azure_fileshare_path: ${{ github.event.inputs.azure_fileshare_path }}
+      overwrite: ${{ github.event.inputs.overwrite }}
+    secrets:
+      ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
+      ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+      # Use one of these authentication methods (in priority order):
+      AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+      # OR
+      AZURE_STORAGE_ACCOUNT_NAME: ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
+      AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
+      # OR (fallback)
+      AZURE_FILESHARE_SAS_TOKEN_URL: ${{ secrets.AZURE_FILESHARE_SAS_TOKEN_URL }}
